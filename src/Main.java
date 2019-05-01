@@ -1,6 +1,9 @@
 import java.util.Arrays;
+import java.util.Random;
 
 public class Main {
+	private static final Random PRNG = new Random();
+	
 	private static class Library {
 		private static final SearchPoint INSTANCE = new SearchPoint();
 
@@ -98,7 +101,7 @@ public class Main {
 
 		/* Handle first part of the trial vector. */
 		for (int index = 0; index < guaranteeIndex; index++) {
-			if (CR <= Math.random()) {
+			if (CR <= PRNG.nextDouble()) {
 				trailPoint.getLocation()[index] = pbest_t.getLocation()[index];
 				continue;
 			}
@@ -111,7 +114,7 @@ public class Main {
 
 		/* Handle second part of the trial vector. */
 		for (int index = guaranteeIndex + 1; index < DIMENSION; index++) {
-			if (CR <= Math.random()) {
+			if (CR <= PRNG.nextDouble()) {
 				trailPoint.getLocation()[index] = pbest_t.getLocation()[index];
 				continue;
 			}
@@ -130,7 +133,7 @@ public class Main {
 			if (Math.random() < CR || k == DIMENSION - 1) {
 				double Dabcd = 0;
 				for (int i = 0; i < referPoints.length; i++) {
-					Dabcd += Math.pow(-1, i % 2) * referPoints[i].getLocation()[rj];
+					Dabcd += (i % 2 == 0 ? +1D : -1D) * referPoints[i].getLocation()[rj];
 				}
 				trailPoint.getLocation()[rj] = gbest_t.getLocation()[rj] + FACTOR * Dabcd;
 			} else {
@@ -141,7 +144,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		final long NUMBER_OF_EXPERIMENTS = 100_000L;
+		final long NUMBER_OF_EXPERIMENTS = 10_000_000L;
 
 		Main app = new Main();
 
